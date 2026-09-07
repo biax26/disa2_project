@@ -1,0 +1,10 @@
+*.o
+*.out
+model/golden_model
+sim/work/
+sim/transcript
+sim/*.wlf
+sim/*.vstf
+sim/vsim.wlf
+*.mpf
+*.log
