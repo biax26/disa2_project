@@ -8,7 +8,13 @@ const int32_t log2e = 24204615;
 Sezione per le flags
 
 */
-
+for (int i =1; i<argc; i++)
+{
+	float x = atof(argv[i]);
+	int32_t x_new = (int32_t)x*16777216; //2^24 è 16777216 facciamo cast a int32_t 
+	int32_t y = x_new*log2e; //moltiplichiamo i due numeri a virgola fissa Q8.24 ottenendo un numero a virgola fissa Q16.48
+	y = (y<<24);
+}
 
 
 
