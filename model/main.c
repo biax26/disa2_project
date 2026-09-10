@@ -1,22 +1,79 @@
 #include "header.h"
 
-int main(int argc, char** argv)
-{
-//log2e in virgola mobile IEEE 754 sarebbe float log2e = 1.44269504, vogliamo portarlo in formato virgola fissa (fixed point) Q8.24 per farlo moltiplichiamo 1.44269504*2^24 e abbiamo 24204615 in decimale
-const int32_t log2e = 24204615;
-/* 
-Sezione per le flags
+// Funzione helper per stampare un float come esadecimale (utile per
+// visualizzare l'input IEEE 754 in formato hex)
+uint32_t f2u(float f) { return *((uint32_t *)&f); }
 
-*/
-for (int i =1; i<argc; i++)
-{
-	float x = atof(argv[i]);
-	int32_t x_new = (int32_t)x*16777216; //2^24 è 16777216 facciamo cast a int32_t 
-	int32_t y = x_new*log2e; //moltiplichiamo i due numeri a virgola fissa Q8.24 ottenendo un numero a virgola fissa Q16.48
-	y = (y<<24);
-}
+int main(void) {
+  // Apriamo il file in cui salveremo i risultati per poterli caricare in
+  // ModelSim / Vivado
+  FILE *file = fopen("outputs.txt", "w");
+  if (file == NULL) {
+    printf("Errore nell'apertura del file!\n");
+    return 1;
+  }
 
+  printf("Inizio generazione dei 100 test vectors per ModelSim...\n\n");
+  fprintf(file, "# Input (Hex) -> Output (Hex) | Commento\n");
 
+  // Array di 10 casi speciali
+  float special_cases[10] = {
+      0.0f,      // Zero
+      -0.0f,     // Zero negativo
+      INFINITY,  // Infinito positivo
+      -INFINITY, // Infinito negativo
+      NAN,       // Not a Number
+      90.0f,     // Overflow (maggiore del limite 88.72)
+      -105.0f,   // Underflow (minore del limite -103.97)
+      1.0f,      // exp(1) = numero di Nepero (e)
+      -1.0f,     // exp(-1) = 1/e
+      6.5f       // Numero di test
+  };
 
-	return 0;
+  // =========================================================================
+  // 1. ELABORAZIONE DEI 10 CASI SPECIALI
+  // =========================================================================
+  for (int i = 0; i < 10; i++) {
+    float input = special_cases[i];
+
+    // Passiamo il float al nostro golden model e riceviamo l'uscita a 32 bit
+    // nuda e cruda
+    uint32_t hw_output = golden_model(input);
+
+    // Stampiamo su file le due stringhe esadecimali per ModelSim
+    fprintf(file, "%08X %08X\n", f2u(input), hw_output);
+
+    // Stampiamo a video per un feedback visivo immediato
+    printf("Test Speciale %2d: Input = %8.3f (0x%08X) -> Output = 0x%08X\n",
+           i + 1, input, f2u(input), hw_output);
+  }
+
+  // =========================================================================
+  // 2. GENERAZIONE DI 90 CASI CASUALI (RANGE VALIDO)
+  // =========================================================================
+  srand((unsigned int)time(NULL));
+
+  printf("\nGenerazione di 90 input random...\n");
+  for (int i = 0; i < 90; i++) {
+    // Generiamo un float casuale compreso in un range "sicuro" tra -20.0 e
+    // +20.0
+    float random_input = ((float)rand() / (float)RAND_MAX) * 40.0f - 20.0f;
+
+    uint32_t hw_output = golden_model(random_input);
+
+    // Scriviamo su file (Formato ideale per essere letto in VHDL tramite
+    // textio)
+    fprintf(file, "%08X %08X\n", f2u(random_input), hw_output);
+
+    // Ne stampiamo solo un paio a video per non inondare il terminale
+    if (i < 5) {
+      printf("Test Random %2d: Input = %8.3f (0x%08X) -> Output = 0x%08X\n",
+             i + 1, random_input, f2u(random_input), hw_output);
+    }
+  }
+
+  fclose(file);
+  printf("\n>>> Test vectors generati con successo nel file 'outputs.txt'!\n");
+
+  return 0;
 }
