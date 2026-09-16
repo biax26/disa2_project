@@ -7,13 +7,12 @@ uint32_t f2u(float f) { return *((uint32_t *)&f); }
 int main(void) {
   // Apriamo il file in cui salveremo i risultati per poterli caricare in
   // ModelSim / Vivado
-  FILE *file = fopen("outputs.txt", "w");
+  FILE *file = fopen("Inputs_and_Outputs(HEX)", "w");
   if (file == NULL) {
     printf("Errore nell'apertura del file!\n");
     return 1;
   }
 
-  printf("Inizio generazione dei 100 test vectors per ModelSim...\n\n");
   fprintf(file, "# Input (Hex) -> Output (Hex) | Commento\n");
 
   // Array di 10 casi speciali
@@ -43,9 +42,8 @@ int main(void) {
     // Stampiamo su file le due stringhe esadecimali per ModelSim
     fprintf(file, "%08X %08X\n", f2u(input), hw_output);
 
-    // Stampiamo a video per un feedback visivo immediato
-    printf("Test Speciale %2d: Input = %8.3f (0x%08X) -> Output = 0x%08X\n",
-           i + 1, input, f2u(input), hw_output);
+   
+   
   }
 
   // =========================================================================
@@ -53,7 +51,7 @@ int main(void) {
   // =========================================================================
   srand((unsigned int)time(NULL));
 
-  printf("\nGenerazione di 90 input random...\n");
+  
   for (int i = 0; i < 90; i++) {
     // Generiamo un float casuale compreso in un range "sicuro" tra -20.0 e
     // +20.0
@@ -64,16 +62,10 @@ int main(void) {
     // Scriviamo su file (Formato ideale per essere letto in VHDL tramite
     // textio)
     fprintf(file, "%08X %08X\n", f2u(random_input), hw_output);
-
-    // Ne stampiamo solo un paio a video per non inondare il terminale
-    if (i < 5) {
-      printf("Test Random %2d: Input = %8.3f (0x%08X) -> Output = 0x%08X\n",
-             i + 1, random_input, f2u(random_input), hw_output);
-    }
   }
 
   fclose(file);
-  printf("\n>>> Test vectors generati con successo nel file 'outputs.txt'!\n");
+  printf("\n>>> Test vectors generati con successo nel file 'Inputs_and_Outputs(HEX).txt'!\n");
 
   return 0;
 }
