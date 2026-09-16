@@ -8,3 +8,4 @@ sim/*.vstf
 sim/vsim.wlf
 *.mpf
 *.log
+.git_backup/
