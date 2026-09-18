@@ -72,69 +72,69 @@ begin
         valid_i <= '1'; wait until rising_edge(clk); valid_i <= '0';
         wait until valid_o = '1';
         ready_i <= '1'; wait until rising_edge(clk); ready_i <= '0';
-        wait for 30 ns;
+        wait for 33 ns;
 
        --zero negativo (-0.0), valore atteso: 1.0 (x"3F800000")
         operand_i <= x"80000000";
         valid_i <= '1'; wait until rising_edge(clk); valid_i <= '0';
         wait until valid_o = '1';
         ready_i <= '1'; wait until rising_edge(clk); ready_i <= '0';
-        wait for 30 ns;
+        wait for 33 ns;
         -- Più Infinito (+Inf) val atteso: +Inf (x"7F800000") 
         operand_i <= x"7F800000";
         valid_i <= '1'; wait until rising_edge(clk); valid_i <= '0';
         wait until valid_o = '1';
         ready_i <= '1'; wait until rising_edge(clk); ready_i <= '0';
-        wait for 30 ns;
+        wait for 33 ns;
         
         --Meno Infinito (-Inf) val atteso: 0.0 
         operand_i <= x"FF800000";
         valid_i <= '1'; wait until rising_edge(clk); valid_i <= '0';
         wait until valid_o = '1';
         ready_i <= '1'; wait until rising_edge(clk); ready_i <= '0';
-        wait for 30 ns;
+        wait for 33 ns;
 
         -- Not-a-Number (NaN) val atteso: NaN (x"7FC00000")
         operand_i <= x"7FC00000";
         valid_i <= '1'; wait until rising_edge(clk); valid_i <= '0';
         wait until valid_o = '1';
         ready_i <= '1'; wait until rising_edge(clk); ready_i <= '0';
-        wait for 30 ns;
+        wait for 33 ns;
 
         --Overflow (Es. ingresso +90.0), val atteso: +Inf (x"7F800000")
         operand_i <= x"42B40000";
         valid_i <= '1'; wait until rising_edge(clk); valid_i <= '0';
         wait until valid_o = '1';
         ready_i <= '1'; wait until rising_edge(clk); ready_i <= '0';
-        wait for 30 ns;
+        wait for 33 ns;
 
         -- Underflow (Es. ingresso -105.0) val atteso: 0.0 
         operand_i <= x"C2D20000";
         valid_i <= '1'; wait until rising_edge(clk); valid_i <= '0';
         wait until valid_o = '1';
         ready_i <= '1'; wait until rising_edge(clk); ready_i <= '0';
-        wait for 30 ns;
+        wait for 33 ns;
 
         --Numero Positivo (+1.0) val atteso: (~2.718, x"402DF8B6")
         operand_i <= x"3F800000";
         valid_i <= '1'; wait until rising_edge(clk); valid_i <= '0';
         wait until valid_o = '1';
         ready_i <= '1'; wait until rising_edge(clk); ready_i <= '0';
-        wait for 30 ns;
+        wait for 33 ns;
 
      -- Numero Negativo (-1.0) val atteso: 1/e (~0.367, x"3EBC5A3A")
         operand_i <= x"BF800000";
         valid_i <= '1'; wait until rising_edge(clk); valid_i <= '0';
         wait until valid_o = '1';
         ready_i <= '1'; wait until rising_edge(clk); ready_i <= '0';
-        wait for 30 ns;
+        wait for 33 ns;
 
         --Valore Generico Positivo (+6.5) val atteso: e^6.5 = ~665.14 (x"44264B72")
         operand_i <= x"40D00000";
         valid_i <= '1'; wait until rising_edge(clk); valid_i <= '0';
         wait until valid_o = '1';
         ready_i <= '1'; wait until rising_edge(clk); ready_i <= '0';
-        wait for 30 ns;
+        wait for 33 ns;
 
       
         std.env.stop;
