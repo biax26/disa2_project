@@ -42,7 +42,7 @@ uint32_t golden_model(float val)
     // 2. CONVERSIONE INPUT IN VIRGOLA FISSA (Q8.24) E RIDUZIONE DEL RANGE
     // =========================================================================
 
-    const int32_t log2e = 24204615; // 1.442695 * 2^24
+    const int32_t log2e = 24204406; // 1.442695 * 2^24
     
     // Moltiplichiamo il float in ingresso per 2^24 per farlo diventare un intero a 32 bit (formato Q8.24).
     // In hardware questo corrisponde a estrarre la mantissa IEEE e shiftarla in base all'esponente.

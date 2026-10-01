@@ -10,7 +10,7 @@
 // Costanti per il polinomio di Horner in formato Q8.24
 #define C0 16777216 // 1.0 * 2^24
 #define C1 11629080 // ln(2) * 2^24
-#define C2 4030278  // (ln(2))^2 / 2 * 2^24
+#define C2 4030273   // (ln(2))^2 / 2 * 2^24
 
 // Lookup Table (LUT) per 2^(F1) pre-calcolata in formato Q8.24
 // Essendo 'const', in hardware questo diventerà una Memoria ROM
