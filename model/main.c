@@ -7,7 +7,7 @@ uint32_t f2u(float f) { return *((uint32_t *)&f); }
 int main(void) {
   // Apriamo il file in cui salveremo i risultati per poterli caricare in
   // ModelSim / Vivado
-  FILE *file = fopen("Inputs_and_Outputs(HEX)", "w");
+  FILE *file = fopen("Inputs_and_Outputs(HEX).txt", "w");
   if (file == NULL) {
     printf("Errore nell'apertura del file!\n");
     return 1;
