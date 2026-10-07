@@ -2,15 +2,15 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
-entity tb_seq_exp_fpu is
+entity tb_seq_exp_fpu2 is
 
-end entity tb_seq_exp_fpu;
+end entity tb_seq_exp_fpu2;
 
-architecture sim of tb_seq_exp_fpu is
+architecture sim of tb_seq_exp_fpu2 is
    
     component seq_exp_fpu is
         port (
-            clk, reset, valid_i, ready_i : in std_logic;
+            clk, reset_n, valid_i, ready_i : in std_logic;
             valid_o, ready_o             : out std_logic;
             operand_i                    : in std_logic_vector(31 downto 0);
             result_o                     : out std_logic_vector(31 downto 0);
@@ -20,7 +20,7 @@ architecture sim of tb_seq_exp_fpu is
 
    
     signal clk       : std_logic := '0';
-    signal reset     : std_logic := '0';
+    signal reset_n     : std_logic := '1';
     signal valid_i   : std_logic := '0';
     signal ready_i   : std_logic := '0';
     signal operand_i : std_logic_vector(31 downto 0) := (others => '0');
@@ -36,7 +36,7 @@ begin
    
     DUT: seq_exp_fpu port map (
         clk       => clk,
-        reset     => reset,
+        reset_n     => reset_n,
         valid_i   => valid_i,
         ready_i   => ready_i,
         valid_o   => valid_o,
@@ -59,83 +59,72 @@ begin
     stimulus_process: process
     begin
         
-        reset <= '1';
+        reset_n <= '0';
         valid_i <= '0';
         ready_i <= '0';
         wait for 20 ns;
-        reset <= '0';
+        reset_n <= '1';
         wait for 20 ns;
         
-        
-        -- Zero Positivo (+0.0), valore atteso: 1.0 (x"3F800000")
-        operand_i <= x"00000000";
+        operand_i <= x"C188F981";
         valid_i <= '1'; wait until rising_edge(clk); valid_i <= '0';
         wait until valid_o = '1';
         ready_i <= '1'; wait until rising_edge(clk); ready_i <= '0';
         wait for 33 ns;
 
-       --zero negativo (-0.0), valore atteso: 1.0 (x"3F800000")
-        operand_i <= x"80000000";
-        valid_i <= '1'; wait until rising_edge(clk); valid_i <= '0';
-        wait until valid_o = '1';
-        ready_i <= '1'; wait until rising_edge(clk); ready_i <= '0';
-        wait for 33 ns;
-        -- Più Infinito (+Inf) val atteso: +Inf (x"7F800000") 
-        operand_i <= x"7F800000";
-        valid_i <= '1'; wait until rising_edge(clk); valid_i <= '0';
-        wait until valid_o = '1';
-        ready_i <= '1'; wait until rising_edge(clk); ready_i <= '0';
-        wait for 33 ns;
-        
-        --Meno Infinito (-Inf) val atteso: 0.0 
-        operand_i <= x"FF800000";
+        operand_i <= x"C13EA097";
         valid_i <= '1'; wait until rising_edge(clk); valid_i <= '0';
         wait until valid_o = '1';
         ready_i <= '1'; wait until rising_edge(clk); ready_i <= '0';
         wait for 33 ns;
 
-        -- Not-a-Number (NaN) val atteso: NaN (x"7FC00000")
-        operand_i <= x"7FC00000";
+        operand_i <= x"407D4D00";
         valid_i <= '1'; wait until rising_edge(clk); valid_i <= '0';
         wait until valid_o = '1';
         ready_i <= '1'; wait until rising_edge(clk); ready_i <= '0';
         wait for 33 ns;
 
-        --Overflow (Es. ingresso +90.0), val atteso: +Inf (x"7F800000")
-        operand_i <= x"42B40000";
+        operand_i <= x"419EB83C";
         valid_i <= '1'; wait until rising_edge(clk); valid_i <= '0';
         wait until valid_o = '1';
         ready_i <= '1'; wait until rising_edge(clk); ready_i <= '0';
         wait for 33 ns;
 
-        -- Underflow (Es. ingresso -105.0) val atteso: 0.0 
-        operand_i <= x"C2D20000";
+        operand_i <= x"40C61F68";
         valid_i <= '1'; wait until rising_edge(clk); valid_i <= '0';
         wait until valid_o = '1';
         ready_i <= '1'; wait until rising_edge(clk); ready_i <= '0';
         wait for 33 ns;
 
-        --Numero Positivo (+1.0) val atteso: (~2.718, x"402DF8B6")
-        operand_i <= x"3F800000";
+        operand_i <= x"C18DDD1F";
         valid_i <= '1'; wait until rising_edge(clk); valid_i <= '0';
         wait until valid_o = '1';
         ready_i <= '1'; wait until rising_edge(clk); ready_i <= '0';
         wait for 33 ns;
 
-     -- Numero Negativo (-1.0) val atteso: 1/e (~0.367, x"3EBC5A3A")
-        operand_i <= x"BF800000";
+        operand_i <= x"C16080B8";
         valid_i <= '1'; wait until rising_edge(clk); valid_i <= '0';
         wait until valid_o = '1';
         ready_i <= '1'; wait until rising_edge(clk); ready_i <= '0';
         wait for 33 ns;
 
-        --Valore Generico Positivo (+6.5) val atteso: e^6.5 = ~665.14 (x"44264B72")
-        operand_i <= x"40D00000";
+        operand_i <= x"3D6CE800";
         valid_i <= '1'; wait until rising_edge(clk); valid_i <= '0';
         wait until valid_o = '1';
         ready_i <= '1'; wait until rising_edge(clk); ready_i <= '0';
         wait for 33 ns;
 
+        operand_i <= x"40FA859C";
+        valid_i <= '1'; wait until rising_edge(clk); valid_i <= '0';
+        wait until valid_o = '1';
+        ready_i <= '1'; wait until rising_edge(clk); ready_i <= '0';
+        wait for 33 ns;
+
+        operand_i <= x"4110558C";
+        valid_i <= '1'; wait until rising_edge(clk); valid_i <= '0';
+        wait until valid_o = '1';
+        ready_i <= '1'; wait until rising_edge(clk); ready_i <= '0';
+        wait for 33 ns;
       
         std.env.stop;
     end process;
