@@ -4,7 +4,7 @@ use ieee.numeric_std.all;
 
 entity seq_exp_fpu is 
     port (
-    clk, reset, valid_i, ready_i: in std_logic;
+    clk, reset_n, valid_i, ready_i: in std_logic;
     valid_o, ready_o: out std_logic;
     operand_i: in std_logic_vector(31 downto 0);
     result_o: out std_logic_vector(31 downto 0);
@@ -46,11 +46,11 @@ const_log2e <= x"01715476";
 const_127<=x"7F";
 c0 <= x"01000000"; 
 c1 <= x"00B17218"; 
-c2 <= x"003D7F41"; 
+c2 <= x"003D7F7B"; 
 
-state_register: process (clk, reset)
+state_register: process (clk, reset_n)
 begin
-    if reset = '1' then
+    if reset_n = '0' then
         ps <= 0;
     elsif rising_edge(clk) then
         ps <= ns;
